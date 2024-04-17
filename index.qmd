@@ -46,7 +46,7 @@ Diese Sitzung fokussiert auf die Arbeit mit R in RStudio und hat vier Ziele, die
 3) Ihr habt den Beispieldatensatz eingelesen und\
 4) Ihr habt ein Mass für Reliabilität für eine Beispielcodierung ausgerechnet.
 
-[Hier](in_class_session_2.R) findet ihr auch nochmal das File, das ich in der Sitzung am Montag genutzt habe, um euch die einzelnen Elemente in R direkt zu zeigen. Ich würde euch aber eher empfehlen die folgenden Ausführungen in diesem Tutorial durchzulesen, da ich dort alles nochmal ausführlich beschreibe. In dem File von Montag sind nur die einzelnen Code-Schnippsel selbst und weitere Erklärungen.
+[Hier](in_class_session_2.R) findet ihr auch nochmal das File, welches ich in der Sitzung am Montag genutzt habe, um euch die einzelnen Elemente in R direkt zu zeigen. Ich würde euch aber eher empfehlen die folgenden Ausführungen in diesem Tutorial durchzulesen, da ich dort alles nochmal ausführlich beschreibe. In dem File von Montag sind nur die einzelnen Code-Schnippsel selbst und weitere Erklärungen.
 
 ###### **R und RStudio installieren**
 
@@ -85,7 +85,7 @@ Um eure Analysen gemäss eurer Forschungsfrage durchführen zu können, müsst i
 
 Für das Tutorial habe ich einen Beispieldatensatz erstellt, anhand dessen ihr die relevanten Schritte üben könnt. Ihr könnt aber auch direkt eure eigenen Daten bzw. eure eigenen Daten einlesen.
 
-Den Beispieldatensatz könnt ihr [hier runterladen](./data_example.xlsx).
+Den Beispieldatensatz könnt ihr [hier herunterladen](./data_example.xlsx).
 
 Als nächstes öffnet ihr RStudio und erstellt ein neues Script in RStudio (File -\> New File -\> R Script). Das Script ist wie ein Do-File in Stata das Dokument wo euer Code geschrieben und gespeichert wird. Als erstes solltet ihr in dem neu geöffneten Script nun eine Überschrift einfügen, damit ihr wisst, um was es sich handelt. Es gibt zwei Arten, Eingaben in R zu machen. Normale Eingaben interpretiert R immer als Rechenoperationen oder Befehle, die ihr über Strg+Enter / Ctrl+Enter ausführen könnt (oder rechts oben im Editor-Fenster bei "Run"). Beispielsweise versteht R hier direkt, dass es sich um eine Rechnung handelt und wenn ihr die Teile markiert und STRG+Enter oder "Run" drückt, gibt RStudio in der Console unten links das entsprechende Ergebnis aus:
 
