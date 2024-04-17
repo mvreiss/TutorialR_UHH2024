@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Michael V. Reiss">
-<meta name="dcterms.date" content="2024-04-18">
+<meta name="dcterms.date" content="2024-04-15">
 
 <title>Einführung in R</title>
 <style>
@@ -114,7 +114,7 @@ background: #00008B;
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">April 18, 2024</p>
+        <p class="date">April 15, 2024</p>
       </div>
     </div>
     
@@ -186,8 +186,11 @@ background: #00008B;
 </section>
 <section id="beispieldatensatz-einlesen" class="level6">
 <h6 class="anchored" data-anchor-id="beispieldatensatz-einlesen"><strong>Beispieldatensatz einlesen</strong></h6>
-<p>Um eure Analysen gemäss eurer Forschungsfrage durchführen zu können, müsst ihr die von euch gesammelten Daten (in dem Fall meistens Zeitungstexte) auswerten. Hierfür existieren Statistikprogramme wie R. Um also mit den Daten zu arbeiten, müssen wir sie zunächst in RStudio einlesen.</p>
-<p>Dafür ladet ihr als erstes den Beispieldatensatz namens “data_example.xlsx” aus OpenOlat herunter. Merkt euch wo ihr diese Datei speichert.</p>
+<p>Um eure Analysen gemäss eurer Forschungsfrage durchführen zu können, müsst ihr die von euch gesammelten Daten auswerten (in dem Fall Zeitungstexte oder Pressemitteilungen). Hierfür existieren Statistikprogramme wie R. Um das zu machen, müssen wir die Daten als erstes jedoch erst einmal in RStudio einlesen.</p>
+<p>Für das Tutorial habe ich einen Beispieldatensatz erstellt, anhand dessen ihr die relevanten Schritte üben könnt. Ihr könnt aber auch direkt eure eigenen Daten bzw. eure eigenen Daten einlesen.</p>
+<p>Den Beispieldatensatz könnt ihr <a href="./beispiel_daten.csv">hier runterladen</a>.</p>
+<p><a href="./beispiel_daten.xlsx">IM EXCEL FORMAT</a></p>
+<!-- Dafür ladet ihr als erstes den Beispieldatensatz namens "data_example.xlsx" aus OpenOlat herunter. Merkt euch wo ihr diese Datei speichert. -->
 <p>Als nächstes öffnet ihr RStudio und erstellt ein neues Script in RStudio (File -&gt; New File -&gt; R Script). Dann solltet ihr in dem neu geöffneten Script eine Überschrift einfügen, damit ihr wisst, um was es sich handelt. Es gibt zwei Arten, Eingaben in R zu machen. Normale Eingaben interpretiert R immer als Befehle, die ihr über Strg+Enter / Ctrl+Enter ausführen könnt (oder recht oben im Script-Fenster bei “Run”). Beispielsweise versteht R bei folgendem Code, was es machen soll und gibt in der Console unten links das entsprechende Ergebnis aus:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="sc">+</span><span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
