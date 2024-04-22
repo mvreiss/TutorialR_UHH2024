@@ -13,7 +13,7 @@ title-block-banner-color: "white"
 editor: visual
 css: styles.css
 author: "Michael V. Reiss"
-date: "April 15, 2024"
+date: "April 22, 2024"
 ---
 
 <br>
@@ -234,7 +234,280 @@ Im Output von `kripp.alpha()` sehen wir drei Angaben. "Subjects" gibt an, wie vi
 
 **22. April 2024**
 
-Inhalte kommen noch
+In dieser Sitzung wollen wir uns die Daten etwas genauer anschauen und Methoden kennen lernen, diese Daten quantitativ zu beschreiben. Das machen wir einerseits mit relevanten Masszahlen (z.B. Mittelwert) aber auch mit grafischen Darstellungen.
+
+Das Lernziel für diese Sitzung ist, grundlegende Methoden der deskriptiven (=beschreibende) Statistik in R und RStudio kennenzulernen und auf eure Daten anwenden zu können. Ausserdem machen wir einen kurzen Abstecher in die Darstellung von Textdaten. Wir nutzen erneut die bisherigen [Beispieldaten](./data_example.xlsx).
+
+###### Statistische Kennzahlen ermitteln
+
+In einem ersten Schritt wollen wir grundlegende statistische Kennzahlen für unsere Daten ermitteln. Das ist in einem empirischen wissenschaftlichen Projekt fast immer der erste Schritt einer Analyse und dient dazu, eine grundlegendes Verständnis von den Daten zu bekommen: Was ist das Durchschnittsalter meiner Teilnehmenden, wie ist das Geschlechterverhältnis, wie sind die Bildungsabschlüsse verteilt, sind typische Fragen die bei einer Umfrage in einem ersten Schritt angeschaut werden. In eurem Kontext betreffen die grundlegenden, deskriptiven Fragen allerdings keine Teilnehmerinnen aus einer Umfrage, sondern eher eure Texte. Von Interesse sind hier z.B. Fragen wie: Wie lang sind meine Texte durchschnittlich, wie verteilen sich die Texte auf die verschiedenen Quellen, wie viele Texte enthalten ein bestimmtes Merkmal, etc.
+
+Ich gehe nun davon aus, dass euch aus letzter Sitzung vertraut ist, wie Daten eingelesen werden und dass ihr den Beispieldatensatz unter dem gleichen Namen ("data") eingelesen habt (er sollte dann rechts oben in eurem Environment aufgelistet sein).
+
+Wenn ihr den Datensatz eingelesen habt, wendet bitte einmal folgenden Befehl an. Dieser stellt sicher, dass die Tabelle in einem normalen sogenannten data.frame Format gespeichert ist und wir alle Operationen ohne Probleme anwenden können:
+
+```{r}
+data <- as.data.frame(data)
+```
+
+Wie in den meisten Tabellen sind die einzelnen Beobachtungen in Zeilen und die Spalten bilden die verschiedenen Variablen. Wenn ihr euch den Datensatz `data` anschaut, seht ihr, dass es hier z.B. die Variablen "nr", "link", "outlet", "date", usw. gibt. Um in R den Mittelwert einer Variable (= Spalte in unserem Fall) auszurechnen gibt es den Befehl `mean()`. Diesem Befehl müssen wir nun ein Argument bzw. eine Bezugsmenge zuweisen, für die der Befehl (in dem Fall der Mittelwert) ausgerechnet werden soll. Wir wollen nun als erstes den Mittelwert für die Spalte "pics" ausrechnen. Versuchen wir es mit der zunächst intuitiven Lösung, nämlich dem Spaltennamen:
+
+```{r}
+#| error: true
+mean(pics)
+```
+
+Das erzeugt einen Fehler, weil R das Objekt nicht kennt (beachte, es ist rechts oben im Environment selbst nicht aufgeführt). Da die Spalte "pics" Teil des grösseren Objekts `data` ist, müssen wir R auch mitteilen, dass "pics" in der Tabelle `data` zu finden ist. Das funktioniert mittel `$`, genauer mittels `data$pics`. Auf die Art wird R mitgeteilt, dass er im Objekt `data` schauen soll und dort die Spalte "pics" findet. Wir können das direkt testen:
+
+```{r}
+data$pics
+```
+
+Ihr seht als Output den Inhalt der Spalte "pics" (ab und zu zu prüfen, ob die Werte mit der Tabelle `data` übereinstimmen ist immer sinnvoll. Damit wird vermieden, dass sich hier und da Fehler einschleichen, die man bei grösseren Datensätzen schnell übersehen kann). Auf die Art können wir den Inhalt aller Spalten aufrufen:
+
+```{r}
+data$date
+data$article_type
+```
+
+**Nice to know**
+
+Anstatt `data$pics` zu schreiben, könnt ihr auch `data[,"pics"]` schreiben. Das Ergebnis ist äquivalent. Der 2. Code ist etwas allgemeiner, da die eckigen Klammern (`[]`) der Code für eine Teilmenge sind. Hier wird entsprechend nach einer Teilmenge von `data` gefragt. In den Klammern wird dann auf Zeilen und Spalten verwiesen, von einem Komma getrennt. In unserem Beispiel bedeutet `data[,"pics"]` also, dass wir alle Zeilen auswählen (indem man nichts schreibt werden alle bestehenden Zeilen genommen), und dass wir die Spalte "pics" auswählen. Wenn ihr nur einzelne Zeilen auswählen wollt, könnt ihr das entsprechend vor dem Komma einfügen. Probiert es mal aus:
+
+```{r}
+#| eval: false
+data[,"pics"] # hat das gleiche Ergebnis wie data$pics
+data[1,"pics"] # hier wählen wir auch die Spalte "pics" aber nur die erste Zeile
+data[1:5,] # Zeilen 1 bis 5 und alle Spalten
+data[c(3,4,9),1] # Zeilen 3, 4 und 9 und nur Spalte 1 (anstatt dem Spaltennamen, kann man auch die Spaltennummer verwenden)
+data[,c("pics","article_type")] # alle Zeilen aber 2 Spalten
+```
+
+Ihr seht ausserdem, dass bei mehreren einzelnen Zeilen oder Spalten, diese Werte mit dem `c()`-Befehl kombiniert werden müssen. Damit wird eine Aufzählung markiert und R erkennt die Kommas richtig:
+
+```{r}
+#| error: true
+data[3,4,9, "pics"] 
+```
+
+Dieser Code ergibt einen Fehler, da R nur ein Komma erwartet, hier aber nun 3 Kommas sind und R nicht versteht, dass sich die ersten drei Werte alle noch auf die Zeilen berufen (alle Kommas sind für R gleich). Entsprechend müsst ihr markieren, dass die ersten drei Werte - in diesem Fall - eine Aufzählung von Zeilen darstellen:
+
+```{r}
+data[c(3,4,9), c(8,9)] # Nur der Output von Zeilen 3, 4 und 9 und gleichzeitig nur Spalten 8 und 9
+```
+
+**Zurück zum Mittelwert, Median, etc.**
+
+Der Mittelwert für die Variable (= Spalte) "pics" kann entsprechend wie folgt ausgerechnet werden:
+
+```{r}
+mean(data$pics) 
+# oder
+mean(data[,"pics"])
+```
+
+Wir wissen nun, dass im Schnitt 1,53 Fotos pro Artikel enthalten sind. Nice. Genauso könnt ihr damit den Median oder beispielsweise die Standardabweichung einer Variable ausgeben lassen:
+
+```{r}
+median(data$pics)
+sd(data$pics)
+```
+
+Das funktioniert aber nicht für die Spalte "article_type", in welcher der Typ des Artikels codiert ist. Das liegt daran, dass für nominale Werte eine Angabe des Mittelwerts wenig Sinn ergibt (was ist der Mittelwert von "essay", agentur" und "normal"?). Entsprechend bekommt ihr eine Fehlermeldung. Der Median hingegen lässt sich korrekterweise auch hier ausgeben.
+
+```{r}
+mean(data$article_type)
+median(data$article_type)
+```
+
+Eine weiterer hilfreicher Befehl ist, die Häufigkeit der unterschiedlichen Ausprägungen einer Variable anzeigen zu lassen. Hierfür ist der Befehl `table()` gedacht. Ihr seht schnell wie er funktioniert und was er als Resultat ausgibt:
+
+```{r}
+table(data$article_type)
+```
+
+Die relativen Häufigkeiten bekommt hier mit folgender Erweiterung:
+
+```{r}
+prop.table(table(data$article_type))
+```
+
+Hier fällt auf, dass die ausführliche Angabe der Nachkommastellen etwas unnötig ist. Das kann man vermeiden, indem man Ergebnisse in R auf die gewünschte Nachkommastelle rundet. Das funktioniert mit dem Befehl `round(code,x)`, wobei code der Code oder Befehl ist, dessen Ergebnis ihr runden wollt und x die Anzahl an Ziffern ist, auf die ihr nach dem Komma runden wollt. Zum Beispiel:
+
+```{r}
+round(prop.table(table(data$article_type)),2)
+```
+
+**Mittelwerte für Teilmengen einer Variable**
+
+Oft ist es aber so, dass ihr nicht am Gesamtmittelwert interessiert seid, sondern zwischen Texttypen oder Quellen unterscheiden wollt. Wenn wir z.B. den Mittelwert an Bildern pro Artikel, getrennt nach Medienhaus bekommen wollen, müssen wir die Daten erst entsprechend aufsplitten.
+
+Das geht auf zwei Arten. Ein Weg ist, den Datensatz in die Teile aufzusplitten, für die ihr jeweils den Mittelwert berechnen wollt. Anschliessend könnt ihr für jede Teilmenge den Mittelwert wie gewohnt berechnen. Dieser Weg hat ein zwei verschiedene Schritte, ist aber sehr intuitiv.
+
+Für einen Überblick lasse ich ich mir zunächst aber nochmal die Namen der Medienhäuser geben:
+
+```{r}
+data$outlet #listet alle auf
+unique(data$outlet) # listet jeden Namen nur einmal auf
+```
+
+Nun erstelle ich eine erstelle eine Teilmenge der Haupttabelle `data`, getrennt nach den jeweiligen Medienhäusern. Das muss ich allerdings für jedes Medienhaus einzeln tun. Und zwar mit folgender Logik. Von meinem Datensatz `data`, nimm aus der Spalte "outlet" (also `data$outlet`) nur die Werte, die genau (`==)` "spon" entsprechen und weise sie einem neuen Objekt zu (in dem Fall `spon_data`). Entsprechend für die anderen Outlets.
+
+```{r}
+spon_data <- subset(data, data$outlet == "spon")
+zon_data <- subset(data, data$outlet == "zon")
+handel_data <- subset(data, data$outlet == "handel")
+tages_data <- subset(data, data$outlet == "tages")
+```
+
+Ihr seht ausserdem, dass wir hier ein `==` anstatt einem einfachen "=" nutzen. Das hängt damit zusammen, dass "=" bereits vergeben ist und wie "\<-" eine Zuweisung von Werten bedeutet. Unser herkömmliches Verständnis von "=" wird in R am ehesten durch `==` umgesetzt.
+
+Wenn wir das gemacht haben, erscheinen rechts oben vier neue Objekte mit den eben vergebenen Namen. Diese können wir uns wie gewohnt anschauen und wir erkennen, dass es sich bei den neuen Tabellen um die gewünschten Teilmengen des Hauptdatensatzes handelt. Für jede dieser Teiltabellen können wir wie gewohnt den Mittelwert berechnen - unter Angabe des neuen Namens des jeweiligen Datensatzes:
+
+```{r}
+mean(spon_data$pics)
+mean(zon_data$pics)
+mean(handel_data$pics)
+mean(tages_data$pics)
+```
+
+Deutlich schneller, aber von den Schritten auf den ersten Blick nicht ganz so intuitiv ist folgender Code. Dieser wirft mit nur einer Zeile Code die Mittelwerte für alle vier Outlets aus:
+
+```{r}
+#install.packages("dplyr") #Hastag am Anfang entfernen, falls ihr "dplyr" das erste Mal installiert
+library(dplyr)
+data %>% group_by(outlet) %>% summarise(mean_value = mean(pics))
+```
+
+Nachdem ihr das Paket `dplyr` installiert und aktiviert habt, seht ihr, dass dieser Code das gleiche Resultat wie die Schritte oben hat - allerdings in nur einer Zeile Code. **Ein wichtiges Take-Away hieraus: In R führen oft verschiedene Wege zum Ziel.**
+
+Eine kurze intuitive Erläuterung deiser Codezeile: \
+Zunächst nehmt ihr ganz normal `data` und verweist den Datensatz per `%>%` - dem sogenannten Pipe-Operator - an den nächsten Befehl. Das ist hier `group_by(outlet)` . Dieser Befehl erstellt für die zugewiesene Variable (hier "outlet") die entsprechenden in ihr enthaltenen Gruppen. Wir wissen, dass "outlet" vier Ausprägungen, also Gruppen hat. Dieses Ergebnis, also alle vier Gruppen, werden dann mit einem erneuten Pipe-Operator an den nächsten Befehl weitergereicht: `summarise(mean_value = mean(pics))`. Der `summarise()`-Befehl bedeutet, dass für alle an ihn übergebenen Daten, in dem Fall die vier Outlets, die Befehle in seiner `()` angewendet werden. Hier ist das entsprechend `mean_value = mean(pics)`. "mean_value" ist dabei ein von uns gewählter Name. Probiert es mal aus und ersetzt "mean_value" oben mit "hokuspokus". Ihr werdet sehen, dass lediglich der Name der Spalte im Ergebnis geändert ist. "mean_value" ist damit lediglich der Name, unter welchem die Ergebnisse des folgenden Befehls gespeichert werden: `mean(pics`. Hier handelt es sich um den bereits bekannten Befehl für Mittelwert und diesem wird hier die Spalte "pics" anvertraut. Da heisst, `mean()` rechnet für die ihm überstellten Daten (also unsere vier Outlets) den Mittelwert der Spalte "pics" aus und speichert das Ergebnis unter "mean_value" (oder "hokuspokus") ab.
+
+Zusammengefasst erledigt der Code hier in einer Zeile, wofür wir davor 8 Zeilen benötigt haben. Ausserdem müsst ihr vor die einzelnen Zeilen (hier: "outlets" und "pics") nicht jedes Mal erneut den Datensatz schreiben (also z.B.: data\$outlets), weil R durch den allerersten Befehl der Zeile (`data %>%`) versteht, dass ihr euch nur auf diesen Datensatz bezieht. Das macht den Code etwas übersichtlicher und kürzer.
+
+Wie immer, könnt ihr das Ergebnis auch einem neuen Objekt zuweisen, um es später wieder leicht aufrufen zu können:
+
+```{r}
+outlet_means <- data %>% group_by(outlet) %>% summarise(mean_value = mean(pics))
+outlet_means
+```
+
+Hier werden die Mittelwerte der vier Outlets nun in der neuen Tabelle `outlet_means` gespeichert. Ihr seht, das dieses Objekt nun rechts oben aufgelistet ist.
+
+Auf die gleiche Weise können wir nun auch die Anzahl an Bildern je Artikeltyp (= article_type) ausrechnen:
+
+```{r}
+type_means <- data %>% group_by(article_type) %>% summarise(type_mean = mean(pics))
+```
+
+Diese Ergebnisse erlauben nun schon erste interpretative Erkentnisse. Zum Beispiel benutzt das Handelsblatt in unserem kleinen Beispiel offenbar am häufigsten Bilder und Zeit Online am wenigsten. Genauso finden wir in Agenturmeldungen weniger Bilder als in normalen Nachrichtenbeiträgen.
+
+###### Grafische Darstellungen
+
+Neben schlichten Kennzahlen bieten für bestimmte Daten aber auch grafische Darstellungen an. Wir lernen hier nur die absoluten Basics. R ist sehr vielseitig und mächtig und lässt auch abenteuerlichste und massgeschneiderte Darstellungen zu. Schaut zum Beispiel [hier](https://r-graph-gallery.com/best-r-chart-examples) für einige wunderschöne Beispiele. In vielen Fällen erfordert das allerdings fortgeschrittene Kentnisse und geht damit über die Kurztutorials dieses Kurses hinaus. Wer sich aber dafür interessiert findet unter dem Stichwort **`ggplot2`** (was ein eigenes Paket für R ist) eine ganzes Universum an Möglichkeiten, allerlei Daten auf alle erdenklichen Arten grafisch aufzubereiten.
+
+Wir bleiben hier allerdings bei den Basics, die bereits recht hilfreich sein können:
+
+```{r}
+pie(data$pics) # Tortendiagramm
+barplot(data$pics) # Balkendiagramm
+```
+
+Beide Darstellungen sind nicht sonderlich hilfreich. Häufig ist eine der zentralen Aufgaben der visuellen Darstellung, sich zu überlegen, ob die Daten schon im richtigen Format für eine *sinnvolle* Darstellungen sind. Das kann mühsam sein, insbesondere da R in Fällen wie oben keinen Fehler ausgibt. Die Darstellungen bzw. Befehle sind nämlich formal nicht falsch (z.B. seitens der Syntax), sie sind allerdings inhaltlich nicht sinnvoll bzw. haben schlicht keinen Mehrwert.
+
+Welche der folgenden Darstellungen ist sinnvoll?
+
+```{r}
+dotchart(table(data$pics))
+plot(table(data$pics))
+pie(table(data$pics))
+```
+
+Sehr oft ist eine Darstellung der Rohdaten alleine nicht sinnvoll oder nicht gewünscht, sondern gewisse Bearbeitungsschritte sind notwendig, um die Daten in eine Form zu bringen, die finale Analyse durchführen zu können. **Tatsächlich machen solche Datenbearbeitungsschritte meist den Grossteil der Analysearbeit in empirischen Projekten aus.** Auch wir haben das rudimentär schon gemacht, nämlich als wir den Mittelwert nach Gruppen getrennt aufgeschlüsselt haben. Auch hier profitieren wir davon und können unsere Ergebnisse grafisch darstellen:
+
+```{r}
+barplot(outlet_means$mean_value)
+```
+
+Diese Darstellung ist allerdings noch arg trostlos und auch unvollständig. Mit weiteren Argumenten können der Darstellung aber noch sinnvolle und notwendige Elemente hinzugefügt werden:
+
+```{r}
+barplot(outlet_means$mean_value, names.arg = outlet_means$outlet, xlab = "Medienhäuser", ylab = "Durchschnittle Anzahl Bilder", col = heat.colors(4))
+```
+
+**Erinnerung** Mit dem Befehl `?` hier z.B.: `?barplot()` könnt ihr die Hilfe für den jeweiligen Befehl aufrufen. Hier seht ihr, welche Argumente grundsätzlich für den jeweiligen Befehl möglich sind und in welcher Art und Wiese diese in dem Befehl aufgeschrieben werden müssen.
+
+Schaut mal in die Hilfe und versucht eigenständig, einen Gesamttitel für das Balkendiagramm einzufügen.
+
+Die Farben können übrigens auch von euch frei gewählt werden, z.B. in dem ihr das aktuelle Argument für Farben durch folgende Codes ersetzt (siehe [HTML-Farbcode](https://www.w3schools.com/colors/colors_picker.asp) für feinstufige Farbauswahl):
+
+```{r}
+barplot(outlet_means$mean_value, names.arg = outlet_means$outlet, xlab = "Medienhäuser", ylab = "Durchschnittle Anzahl Bilder", col = colors <- c("#FF0000", "#0000FF", "#008000","#FFA500")
+)
+```
+
+Genauso können für eine bessere Verständlichkeit auch die Namen der Medienhäuser in der entsprechenden Spalte noch ausgeschrieben werden. Dann werden sie in der Darstellung auch entsprechend angezeigt:
+
+```{r}
+outlet_means$outlet <- c("Handelsblatt","Spiegel Online","Tagesschau","Zeit Online") #Achtung, auf richtige Reihenfolge achten! 
+
+barplot(outlet_means$mean_value, names.arg = outlet_means$outlet, xlab = "Medienhäuser", ylab = "Durchschnittle Anzahl Bilder", col = colors <- "lightblue")
+```
+
+###### Darstellungsformen für Textdaten: Wortwolken
+
+Die Masszahlen und Darstellungsformen soweit waren sehr allgemein und auf alle Arten von Daten anwendbar. Zuletzt wollen wir noch eine Darstellungsform kennen lernen, die spezifisch für Textdaten anwendbar ist: Wortwolken
+
+Hierfür ist es hilfreich, ein Paket (bzw. zwei) zu installieren, welches spezifisch für die Arbeit mit Textdaten geschaffen wurde:
+
+```{r}
+install.packages(c("quanteda", "quanteda.textplots"))
+library(quanteda)
+library(quanteda.textplots)
+```
+
+Die Autoren dieses Pakets haben uns viel Arbeit erspart und machen es uns einfach: Um nun eine Wortwolke zu erzeugen sind nur drei einfache Schritte notwendig. Ihre Bedeutung habe ich in den Kommentaren im Code erläutert:
+
+```{r}
+text_tokens <- tokens(data$text) #die Texte der Artikel werden in einzelne Wörter aufgetrennt 
+text_matrix <- dfm(text_tokens) #die aufgetrennten Wörter werden nun in einer speziellen Matrixform gespeichert (Document-Feature-Matrix DFM)
+textplot_wordcloud(text_matrix) # aus dieser DFM wird eine Wortwolke kreiert
+```
+
+Das ist schon ganz cool, aber auch ein wenig unübersichtlich. Wir wollen die Wolke nun auf die 50 häufigsten Wörter (hier: tokens) limitieren Das ist durch quanteda einfach möglich, da es im Befehl für die Wordcloud ein Argument gibt, die Grösse zu beschränken (siehe `?textplot_wordcloud()`):
+
+```{r}
+textplot_wordcloud(text_matrix, max_words = 50)
+```
+
+Nun ist diese Darstellung allerdings nicht sehr hilfreich, da wir lauter inhaltslose Füllwörter wie "der", "die", "und", etc. haben. Solche inhaltslose Füllwörter werden als "Stopwords" bezeichnet. Für verschiedene Sprachen sind hier in dem Paket `quanteda` bereits Listen hinterlegt, die festlegen welche Wörter als solche stopwords zählen (wir können solche Listen auch selbst definieren). Diese existierende Liste können wir uns auch anzeigen lassen:
+
+```{r}
+stopwords("german")
+```
+
+Diese Wöter wollen wir nun aus unseren Texten entfernen. Das geht wie folgt. Wir fangen dabei wieder bei unseren Ausgangsdaten an und der Code ist fast identisch zu davor. Mit einem kleinen Zusatz. Schau gerne ob du ihn entdeckst und erraten kannst, was dort passiert und auch, was ich sonst noch geändert habe und warum:
+
+```{r}
+text_tokens <- tokens(data$text, remove_punct = TRUE) 
+text_tokens <- tokens_remove(text_tokens, pattern = stopwords("german"))
+text_matrix <- dfm(text_tokens) 
+textplot_wordcloud(text_matrix, max_words = 50)
+
+```
+
+Spannend wäre auch, als nächstes zu schauen, ob sich die häufigsten Wörter in den Texten je nach Medienhaus unterscheiden. Hat jemand eine Idee wie man das mit den Methoden, die wir bisher kennen gelernt haben grafisch analysieren könnte?
+
+Ich kann euch sehr empfehlen, euch mal die [Beispielseite](http://quanteda.io/articles/pkgdown/examples/plotting.html) von `quanteda` anzuschauen. Abseits der Wortwolke, sind hier noch weitere wirklich hilfreiche Darstellungsformen gut verständlich aufbereitet. Insgesondere die Frequency Plots, [siehe hier](http://quanteda.io/articles/pkgdown/examples/plotting.html#frequency-plots), könnten für die ein oder andere Auswertung möglicherweise interessant sein (dort wird dann auch auf das oben bereits kurz erwähnte Paket für grafische Darstellungen `ggplot2` zurückgegriffen).
+
+**Nice to know:**
+
+Die Art und Weise wie in der Textverarbeitung Texte oft gespeichert werden - auch bei uns oben - ist ziemlich raffiniert. Schaut euch dazu die Document-Frequency-Matrix einmal an. Fällt euch was auf?
+
+```{r}
+text_matrix
+```
 
 ## Sitzung 6: Schließende Statistik
 
