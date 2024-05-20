@@ -13,7 +13,7 @@ title-block-banner-color: "white"
 editor: visual
 css: styles.css
 author: "Michael V. Reiss"
-date: "Mai 13, 2024"
+date: "May 13, 2024"
 ---
 
 <br>
