@@ -7,7 +7,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Michael V. Reiss">
-<meta name="dcterms.date" content="2024-04-22">
 
 <title>Einführung in R</title>
 <style>
@@ -114,7 +113,7 @@ background: #00008B;
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">April 22, 2024</p>
+        <p class="date">Invalid Date</p>
       </div>
     </div>
     
@@ -141,7 +140,11 @@ background: #00008B;
   <li><a href="#grafische-darstellungen" id="toc-grafische-darstellungen" class="nav-link" data-scroll-target="#grafische-darstellungen">Grafische Darstellungen</a></li>
   <li><a href="#darstellungsformen-für-textdaten-wortwolken" id="toc-darstellungsformen-für-textdaten-wortwolken" class="nav-link" data-scroll-target="#darstellungsformen-für-textdaten-wortwolken">Darstellungsformen für Textdaten: Wortwolken</a></li>
   </ul></li>
-  <li><a href="#sitzung-6-schließende-statistik" id="toc-sitzung-6-schließende-statistik" class="nav-link" data-scroll-target="#sitzung-6-schließende-statistik">Sitzung 6: Schließende Statistik</a></li>
+  <li><a href="#sitzung-6-schließende-statistik" id="toc-sitzung-6-schließende-statistik" class="nav-link" data-scroll-target="#sitzung-6-schließende-statistik">Sitzung 6: Schließende Statistik</a>
+  <ul>
+  <li><a href="#mittelwertvergleich-t-test" id="toc-mittelwertvergleich-t-test" class="nav-link" data-scroll-target="#mittelwertvergleich-t-test">Mittelwertvergleich (t-test)</a></li>
+  <li><a href="#korrelationstest" id="toc-korrelationstest" class="nav-link" data-scroll-target="#korrelationstest">Korrelationstest</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -500,22 +503,8 @@ agentur   essay  normal
 <p>Deutlich schneller, aber von den Schritten auf den ersten Blick nicht ganz so intuitiv ist folgender Code. Dieser wirft mit nur einer Zeile Code die Mittelwerte für alle vier Outlets aus:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("dplyr") #Hastag am Anfang entfernen, falls ihr "dplyr" das erste Mal installiert</span></span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>
-Attache Paket: 'dplyr'</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Die folgenden Objekte sind maskiert von 'package:stats':
-
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Die folgenden Objekte sind maskiert von 'package:base':
-
-    intersect, setdiff, setequal, union</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(outlet) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">mean_value =</span> <span class="fu">mean</span>(pics))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(outlet) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">mean_value =</span> <span class="fu">mean</span>(pics))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 2
   outlet mean_value
@@ -532,8 +521,8 @@ Zunächst nehmt ihr ganz normal <code>data</code> und verweist den Datensatz per
 <p>Zusammengefasst erledigt der Code hier in einer Zeile, wofür wir davor 8 Zeilen benötigt haben. Ausserdem müsst ihr vor die einzelnen Zeilen (hier: “outlets” und “pics”) nicht jedes Mal erneut den Datensatz schreiben (also z.B.: data$outlets), weil R durch den allerersten Befehl der Zeile (<code>data %&gt;%</code>) versteht, dass ihr euch nur auf diesen Datensatz bezieht. Das macht den Code etwas übersichtlicher und kürzer.</p>
 <p>Wie immer, könnt ihr das Ergebnis auch einem neuen Objekt zuweisen, um es später wieder leicht aufrufen zu können:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>outlet_means <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(outlet) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">mean_value =</span> <span class="fu">mean</span>(pics))</span>
-<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>outlet_means</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>outlet_means <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(outlet) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">mean_value =</span> <span class="fu">mean</span>(pics))</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>outlet_means</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 4 × 2
   outlet mean_value
@@ -547,7 +536,7 @@ Zunächst nehmt ihr ganz normal <code>data</code> und verweist den Datensatz per
 <p>Hier werden die Mittelwerte der vier Outlets nun in der neuen Tabelle <code>outlet_means</code> gespeichert. Ihr seht, das dieses Objekt nun rechts oben aufgelistet ist.</p>
 <p>Auf die gleiche Weise können wir nun auch die Anzahl an Bildern je Artikeltyp (= article_type) ausrechnen:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>type_means <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(article_type) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">type_mean =</span> <span class="fu">mean</span>(pics))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>type_means <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(article_type) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">type_mean =</span> <span class="fu">mean</span>(pics))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Diese Ergebnisse erlauben nun schon erste interpretative Erkentnisse. Zum Beispiel benutzt das Handelsblatt in unserem kleinen Beispiel offenbar am häufigsten Bilder und Zeit Online am wenigsten. Genauso finden wir in Agenturmeldungen weniger Bilder als in normalen Nachrichtenbeiträgen.</p>
 </section>
@@ -556,11 +545,11 @@ Zunächst nehmt ihr ganz normal <code>data</code> und verweist den Datensatz per
 <p>Neben schlichten Kennzahlen bieten für bestimmte Daten aber auch grafische Darstellungen an. Wir lernen hier nur die absoluten Basics. R ist sehr vielseitig und mächtig und lässt auch abenteuerlichste und massgeschneiderte Darstellungen zu. Schaut zum Beispiel <a href="https://r-graph-gallery.com/best-r-chart-examples">hier</a> für einige wunderschöne Beispiele. In vielen Fällen erfordert das allerdings fortgeschrittene Kentnisse und geht damit über die Kurztutorials dieses Kurses hinaus. Wer sich aber dafür interessiert findet unter dem Stichwort <strong><code>ggplot2</code></strong> (was ein eigenes Paket für R ist) eine ganzes Universum an Möglichkeiten, allerlei Daten auf alle erdenklichen Arten grafisch aufzubereiten.</p>
 <p>Wir bleiben hier allerdings bei den Basics, die bereits recht hilfreich sein können:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pie</span>(data<span class="sc">$</span>pics) <span class="co"># Tortendiagramm</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pie</span>(data<span class="sc">$</span>pics) <span class="co"># Tortendiagramm</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(data<span class="sc">$</span>pics) <span class="co"># Balkendiagramm</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(data<span class="sc">$</span>pics) <span class="co"># Balkendiagramm</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-35-2.png" class="img-fluid" width="672"></p>
 </div>
@@ -568,7 +557,7 @@ Zunächst nehmt ihr ganz normal <code>data</code> und verweist den Datensatz per
 <p>Beide Darstellungen sind nicht sonderlich hilfreich. Häufig ist eine der zentralen Aufgaben der visuellen Darstellung, sich zu überlegen, ob die Daten schon im richtigen Format für eine <em>sinnvolle</em> Darstellungen sind. Das kann mühsam sein, insbesondere da R in Fällen wie oben keinen Fehler ausgibt. Die Darstellungen bzw. Befehle sind nämlich formal nicht falsch (z.B. seitens der Syntax), sie sind allerdings inhaltlich nicht sinnvoll bzw. haben schlicht keinen Mehrwert.</p>
 <p>Welche der folgenden Darstellungen ist sinnvoll?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dotchart</span>(<span class="fu">table</span>(data<span class="sc">$</span>pics))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dotchart</span>(<span class="fu">table</span>(data<span class="sc">$</span>pics))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in dotchart(table(data$pics)): 'x' ist weder Vektor noch Matrix: nutze
 as.numeric(x)</code></pre>
@@ -576,25 +565,25 @@ as.numeric(x)</code></pre>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">table</span>(data<span class="sc">$</span>pics))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">table</span>(data<span class="sc">$</span>pics))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-36-2.png" class="img-fluid" width="672"></p>
 </div>
-<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pie</span>(<span class="fu">table</span>(data<span class="sc">$</span>pics))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pie</span>(<span class="fu">table</span>(data<span class="sc">$</span>pics))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-36-3.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Sehr oft ist eine Darstellung der Rohdaten alleine nicht sinnvoll oder nicht gewünscht, sondern gewisse Bearbeitungsschritte sind notwendig, um die Daten in eine Form zu bringen, die finale Analyse durchführen zu können. <strong>Tatsächlich machen solche Datenbearbeitungsschritte meist den Grossteil der Analysearbeit in empirischen Projekten aus.</strong> Auch wir haben das rudimentär schon gemacht, nämlich als wir den Mittelwert nach Gruppen getrennt aufgeschlüsselt haben. Auch hier profitieren wir davon und können unsere Ergebnisse grafisch darstellen:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(outlet_means<span class="sc">$</span>mean_value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(outlet_means<span class="sc">$</span>mean_value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Diese Darstellung ist allerdings noch arg trostlos und auch unvollständig. Mit weiteren Argumenten können der Darstellung aber noch sinnvolle und notwendige Elemente hinzugefügt werden:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(outlet_means<span class="sc">$</span>mean_value, <span class="at">names.arg =</span> outlet_means<span class="sc">$</span>outlet, <span class="at">xlab =</span> <span class="st">"Medienhäuser"</span>, <span class="at">ylab =</span> <span class="st">"Durchschnittle Anzahl Bilder"</span>, <span class="at">col =</span> <span class="fu">heat.colors</span>(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(outlet_means<span class="sc">$</span>mean_value, <span class="at">names.arg =</span> outlet_means<span class="sc">$</span>outlet, <span class="at">xlab =</span> <span class="st">"Medienhäuser"</span>, <span class="at">ylab =</span> <span class="st">"Durchschnittle Anzahl Bilder"</span>, <span class="at">col =</span> <span class="fu">heat.colors</span>(<span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -603,17 +592,17 @@ as.numeric(x)</code></pre>
 <p>Schaut mal in die Hilfe und versucht eigenständig, einen Gesamttitel für das Balkendiagramm einzufügen.</p>
 <p>Die Farben können übrigens auch von euch frei gewählt werden, z.B. in dem ihr das aktuelle Argument für Farben durch folgende Codes ersetzt (siehe <a href="https://www.w3schools.com/colors/colors_picker.asp">HTML-Farbcode</a> für feinstufige Farbauswahl):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(outlet_means<span class="sc">$</span>mean_value, <span class="at">names.arg =</span> outlet_means<span class="sc">$</span>outlet, <span class="at">xlab =</span> <span class="st">"Medienhäuser"</span>, <span class="at">ylab =</span> <span class="st">"Durchschnittle Anzahl Bilder"</span>, <span class="at">col =</span> colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#FF0000"</span>, <span class="st">"#0000FF"</span>, <span class="st">"#008000"</span>,<span class="st">"#FFA500"</span>)</span>
-<span id="cb86-2"><a href="#cb86-2" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(outlet_means<span class="sc">$</span>mean_value, <span class="at">names.arg =</span> outlet_means<span class="sc">$</span>outlet, <span class="at">xlab =</span> <span class="st">"Medienhäuser"</span>, <span class="at">ylab =</span> <span class="st">"Durchschnittle Anzahl Bilder"</span>, <span class="at">col =</span> colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#FF0000"</span>, <span class="st">"#0000FF"</span>, <span class="st">"#008000"</span>,<span class="st">"#FFA500"</span>)</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Genauso können für eine bessere Verständlichkeit auch die Namen der Medienhäuser in der entsprechenden Spalte noch ausgeschrieben werden. Dann werden sie in der Darstellung auch entsprechend angezeigt:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>outlet_means<span class="sc">$</span>outlet <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Handelsblatt"</span>,<span class="st">"Spiegel Online"</span>,<span class="st">"Tagesschau"</span>,<span class="st">"Zeit Online"</span>) <span class="co">#Achtung, auf richtige Reihenfolge achten! </span></span>
-<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(outlet_means<span class="sc">$</span>mean_value, <span class="at">names.arg =</span> outlet_means<span class="sc">$</span>outlet, <span class="at">xlab =</span> <span class="st">"Medienhäuser"</span>, <span class="at">ylab =</span> <span class="st">"Durchschnittle Anzahl Bilder"</span>, <span class="at">col =</span> colors <span class="ot">&lt;-</span> <span class="st">"lightblue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>outlet_means<span class="sc">$</span>outlet <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Handelsblatt"</span>,<span class="st">"Spiegel Online"</span>,<span class="st">"Tagesschau"</span>,<span class="st">"Zeit Online"</span>) <span class="co">#Achtung, auf richtige Reihenfolge achten! </span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="fu">barplot</span>(outlet_means<span class="sc">$</span>mean_value, <span class="at">names.arg =</span> outlet_means<span class="sc">$</span>outlet, <span class="at">xlab =</span> <span class="st">"Medienhäuser"</span>, <span class="at">ylab =</span> <span class="st">"Durchschnittle Anzahl Bilder"</span>, <span class="at">col =</span> colors <span class="ot">&lt;-</span> <span class="st">"lightblue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -624,7 +613,7 @@ as.numeric(x)</code></pre>
 <p>Die Masszahlen und Darstellungsformen soweit waren sehr allgemein und auf alle Arten von Daten anwendbar. Zuletzt wollen wir noch eine Darstellungsform kennen lernen, die spezifisch für Textdaten anwendbar ist: Wortwolken</p>
 <p>Hierfür ist es hilfreich, ein Paket (bzw. zwei) zu installieren, welches spezifisch für die Arbeit mit Textdaten geschaffen wurde:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"quanteda"</span>, <span class="st">"quanteda.textplots"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"quanteda"</span>, <span class="st">"quanteda.textplots"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Installiere Pakete nach 'C:/Users/Michael/AppData/Local/R/win-library/4.3'
 (da 'lib' nicht spezifiziert)</code></pre>
@@ -634,14 +623,14 @@ as.numeric(x)</code></pre>
 Paket 'quanteda.textplots' erfolgreich ausgepackt und MD5 Summen abgeglichen
 
 Die heruntergeladenen Binärpakete sind in 
-    C:\Users\Michael\AppData\Local\Temp\RtmpQZK1nJ\downloaded_packages</code></pre>
+    C:\Users\Michael\AppData\Local\Temp\Rtmp0SMgpD\downloaded_packages</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Paket 'quanteda' wurde unter R Version 4.3.3 erstellt</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Package version: 4.0.1
+<pre><code>Package version: 4.0.2
 Unicode version: 15.1
 ICU version: 74.1</code></pre>
 </div>
@@ -651,30 +640,30 @@ ICU version: 74.1</code></pre>
 <div class="cell-output cell-output-stderr">
 <pre><code>See https://quanteda.io for tutorials and examples.</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda.textplots)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda.textplots)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Paket 'quanteda.textplots' wurde unter R Version 4.3.3 erstellt</code></pre>
 </div>
 </div>
 <p>Die Autoren dieses Pakets haben uns viel Arbeit erspart und machen es uns einfach: Um nun eine Wortwolke zu erzeugen sind nur drei einfache Schritte notwendig. Ihre Bedeutung habe ich in den Kommentaren im Code erläutert:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>text_tokens <span class="ot">&lt;-</span> <span class="fu">tokens</span>(data<span class="sc">$</span>text) <span class="co">#die Texte der Artikel werden in einzelne Wörter aufgetrennt </span></span>
-<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>text_matrix <span class="ot">&lt;-</span> <span class="fu">dfm</span>(text_tokens) <span class="co">#die aufgetrennten Wörter werden nun in einer speziellen Matrixform gespeichert (Document-Feature-Matrix DFM)</span></span>
-<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_wordcloud</span>(text_matrix) <span class="co"># aus dieser DFM wird eine Wortwolke kreiert</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb94"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" aria-hidden="true" tabindex="-1"></a>text_tokens <span class="ot">&lt;-</span> <span class="fu">tokens</span>(data<span class="sc">$</span>text) <span class="co">#die Texte der Artikel werden in einzelne Wörter aufgetrennt </span></span>
+<span id="cb94-2"><a href="#cb94-2" aria-hidden="true" tabindex="-1"></a>text_matrix <span class="ot">&lt;-</span> <span class="fu">dfm</span>(text_tokens) <span class="co">#die aufgetrennten Wörter werden nun in einer speziellen Matrixform gespeichert (Document-Feature-Matrix DFM)</span></span>
+<span id="cb94-3"><a href="#cb94-3" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_wordcloud</span>(text_matrix) <span class="co"># aus dieser DFM wird eine Wortwolke kreiert</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Das ist schon ganz cool, aber auch ein wenig unübersichtlich. Wir wollen die Wolke nun auf die 50 häufigsten Wörter (hier: tokens) limitieren Das ist durch quanteda einfach möglich, da es im Befehl für die Wordcloud ein Argument gibt, die Grösse zu beschränken (siehe <code>?textplot_wordcloud()</code>):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_wordcloud</span>(text_matrix, <span class="at">max_words =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_wordcloud</span>(text_matrix, <span class="at">max_words =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Nun ist diese Darstellung allerdings nicht sehr hilfreich, da wir lauter inhaltslose Füllwörter wie “der”, “die”, “und”, etc. haben. Solche inhaltslose Füllwörter werden als “Stopwords” bezeichnet. Für verschiedene Sprachen sind hier in dem Paket <code>quanteda</code> bereits Listen hinterlegt, die festlegen welche Wörter als solche stopwords zählen (wir können solche Listen auch selbst definieren). Diese existierende Liste können wir uns auch anzeigen lassen:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stopwords</span>(<span class="st">"german"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">stopwords</span>(<span class="st">"german"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  [1] "aber"      "alle"      "allem"     "allen"     "aller"     "alles"    
   [7] "als"       "also"      "am"        "an"        "ander"     "andere"   
@@ -719,10 +708,10 @@ ICU version: 74.1</code></pre>
 </div>
 <p>Diese Wöter wollen wir nun aus unseren Texten entfernen. Das geht wie folgt. Wir fangen dabei wieder bei unseren Ausgangsdaten an und der Code ist fast identisch zu davor. Mit einem kleinen Zusatz. Schau gerne ob du ihn entdeckst und erraten kannst, was dort passiert und auch, was ich sonst noch geändert habe und warum:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>text_tokens <span class="ot">&lt;-</span> <span class="fu">tokens</span>(data<span class="sc">$</span>text, <span class="at">remove_punct =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>text_tokens <span class="ot">&lt;-</span> <span class="fu">tokens_remove</span>(text_tokens, <span class="at">pattern =</span> <span class="fu">stopwords</span>(<span class="st">"german"</span>))</span>
-<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a>text_matrix <span class="ot">&lt;-</span> <span class="fu">dfm</span>(text_tokens) </span>
-<span id="cb102-4"><a href="#cb102-4" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_wordcloud</span>(text_matrix, <span class="at">max_words =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>text_tokens <span class="ot">&lt;-</span> <span class="fu">tokens</span>(data<span class="sc">$</span>text, <span class="at">remove_punct =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>text_tokens <span class="ot">&lt;-</span> <span class="fu">tokens_remove</span>(text_tokens, <span class="at">pattern =</span> <span class="fu">stopwords</span>(<span class="st">"german"</span>))</span>
+<span id="cb98-3"><a href="#cb98-3" aria-hidden="true" tabindex="-1"></a>text_matrix <span class="ot">&lt;-</span> <span class="fu">dfm</span>(text_tokens) </span>
+<span id="cb98-4"><a href="#cb98-4" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_wordcloud</span>(text_matrix, <span class="at">max_words =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -732,7 +721,7 @@ ICU version: 74.1</code></pre>
 <p><strong>Nice to know:</strong></p>
 <p>Die Art und Weise wie in der Textverarbeitung Texte oft gespeichert werden - auch bei uns oben - ist ziemlich raffiniert. Schaut euch dazu die Document-Frequency-Matrix einmal an. Fällt euch was auf?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>text_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>text_matrix</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Document-feature matrix of: 15 documents, 2,638 features (88.24% sparse) and 0 docvars.
        features
@@ -759,7 +748,123 @@ docs    republikaner bundesstaat south carolina
 <section id="sitzung-6-schließende-statistik" class="level2">
 <h2 class="anchored" data-anchor-id="sitzung-6-schließende-statistik">Sitzung 6: Schließende Statistik</h2>
 <p><strong>13. Mai 2024</strong></p>
-<p>Inhalte kommen noch</p>
+<p>In der heutigen Sitzung schauen wir uns an, wie statistische Tests in R durchgeführt werden können. Dabei wird nicht oder kaum darauf eingegangen, wie diese Tests mathematisch funktionieren oder in welchen Situationen und unter welchen Bedingungen sie geeignet sind. Schaut dafür bitte in die Aufzeichnungen oder Unterlagen eurer Methoden/Statistik-Kurse.</p>
+<p>Den Code für die Beispiele in der Sitzung am Montag findet ihr <a href="in_class_session_6.R">hier</a>. Euch fehlt hier allerdings der 2. Datensatz, den ich in der Sitzung verwendet habe, sodass ihr nicht alle Befehle daheim ausführen könnt. Außerdem ist der Code nicht gut kommentiert, was es schwierig macht, zu verstehen was passiert. Will sagen: Der Code aus der Sitzung ist vermutlich nicht sehr hilfreich. Mit folgendem Tutorial erhaltet ihr allerdings alle notwendigen Erklärungen, um die besprochenen Tests auch auf eure Daten anzuwenden (sofern sinnvoll!).</p>
+<p>Generell gilt (grob gesagt) bei einem empirischen Projekt bzw. der statistischen Auswertung folgende Prozessreihenfolge:<br>
+1) Was ist mein Forschungsinteresse, meine Forschungsfrage und/oder meine Hypothese(n)<br>
+2) Welches Analyse (z.B. statistischer Test) beantwortet meine Forschungsfrage oder Hypothese(n)<br>
+3) Sind die Bedingungen für die Analyse/den Test gegeben.<br>
+4) Analyse/Test durchführen</p>
+<p>Punkt 1 ist für euch meist bereits geklärt bzw. das wurde letztes Semester behandelt. Zu Punkt 2 und 3 habt ihr etwas in euren Methoden/Statistikkursen gelernt, diese solltet ihr nötigenfalls nochmals konsultieren. Punkt 4 wird euch hier beigebracht. Als Forschungsfrage interessiert uns für dieses Tutorial, <strong>ob sich die Anzahl an Fotos in den Artikeln eines Outlets (z.B. Handelsblatt) von der Anzahl an Fotos in Artikeln anderer Outlets unterscheidet</strong>. In einem/eurem richtigen Projekt solltet ihr Punkte 2 und 3 durchführen. Für dieses Tutorial überspringen wir diese Punkte und legen uns auf den Mittelwertvergleich (t-Test) fest. Ob dieser Test für euch in Frage kommt, hängt von eurer Forschungsfrage ab und der Art der Daten die ihr habt. Das solltet ihr selbst einschätzen können.</p>
+<p>Um die Durchführung in R zu lernen, arbeiten wir erneut mit unserem <a href="./data_example.xlsx">Testdatensatz</a>. Bitte lest diesen erneut in R ein. Wer sich nicht erinnert wie das geht, findet die Anleitung oben in den Ausführungen der letzten zwei Sitzungen.</p>
+<section id="mittelwertvergleich-t-test" class="level6">
+<h6 class="anchored" data-anchor-id="mittelwertvergleich-t-test">Mittelwertvergleich (t-test)</h6>
+<p>Der t-Test ist ein häufig angewandter statistischer Test um zu prüfen, ob sich ein Mittelwert einer Variable von einem anderen Wert (z.B. der Mittelwert einer anderen Variable oder von einem festen Wert) unterscheidet. Der t-Test ist beispielsweise gefragt, wenn man testen möchte, ob sich die mittlere Körpergröße einer Gruppe von Menschen von der Durchschnittskörpergröße einer anderen Gruppe unterscheidet. In unserem Kontext wäre ein Anwendungsgebiet, ob sich die mittlere Anzahl an Nennungen von “Trump” in Artikeln eines Zeitungshauses von der mittleren Anzahl an Nennungen von “Trump” in Artikeln eines anderen Zeitungshauses unterscheiden.</p>
+<p>Für unsere Frage interessieren uns als Variable die Anzahl der Fotos. Und die Gruppen, zu denen wir die Anzahl an Fotos vergleichen wollen, sind vier unterschiedliche Outlets (hier: Spiegel Online, Zeit Online, Handelsblatt und Tagesschau). Zu Beginn ist es immer hilfreich, sich einen Überblick zu verschaffen. Dazu gehört zunächst, sich die Mittelwerte der Anzahl der Fotos pro Artikel anzuschauen.</p>
+<p>Die durchschnittliche Anzahl an Fotos insgesamt lässt sich leicht ausrechnen, das haben wir bereits oben gelernt:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>pics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.533333</code></pre>
+</div>
+</div>
+<p>Jetzt wollen wir uns anschauen, was die Durchschnittswerte für die vier Outlets sind. Es gibt unterschiedliche Wege, den Mittelwert für mehrere Gruppen zu berechnen. Eine der elegantesten Lösungen ist (dafür braucht ihr das Package dplyr):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb103"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" aria-hidden="true" tabindex="-1"></a>outlet_means <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(outlet) <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">mean_value =</span> <span class="fu">mean</span>(pics))</span>
+<span id="cb103-2"><a href="#cb103-2" aria-hidden="true" tabindex="-1"></a>outlet_means</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 2
+  outlet mean_value
+  &lt;chr&gt;       &lt;dbl&gt;
+1 handel        3  
+2 spon          1.8
+3 tages         1  
+4 zon           0.5</code></pre>
+</div>
+</div>
+<p>Wir sehen, dass es erhebliche Unterschiede in der Anzahl der Fotos pro Artikel zwischen den vier Outlets gibt. Jetzt wollen wir aber wissen, ob der Unterschied in der Anzahl der Fotos zwischen Handelsblatt und dem Rest auch statistisch signifikant ist.</p>
+<p>Dazu wenden wir nun schon den t-Test an. Dieser wird mit dem Befehl <code>t.test()</code> in R aufgerufen. Damit R weiss, welche Mittelwerte es vergleichen soll, müssen wir diese R mitteilen. Die Logik ist dabei <code>t.test(Werte der Variable von Gruppe A, Werte der Variable von Gruppe B)</code>. Die Variable ist die Anzahl der Fotos und die Gruppen sind unsere Outlets.</p>
+<p>Dazu teilen wir unsere Daten in die beiden Gruppen, die uns interessieren. Einmal alle Artikel vom Handelsblatt und das andere Mal der Rest. Das geht mit dem <code>subset()</code>-Befehl:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a>handel_data <span class="ot">&lt;-</span> <span class="fu">subset</span>(data, data<span class="sc">$</span>outlet<span class="sc">==</span><span class="st">"handel"</span>)</span>
+<span id="cb105-2"><a href="#cb105-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Mit diesem Befehl werden alle Daten, die in der Spalte "outlet" den Wert "handel" haben in eine neue Tabelle namens "handel_data" geschrieben</span></span>
+<span id="cb105-3"><a href="#cb105-3" aria-hidden="true" tabindex="-1"></a>no_handel_data <span class="ot">&lt;-</span> <span class="fu">subset</span>(data, data<span class="sc">$</span>outlet<span class="sc">!=</span><span class="st">"handel"</span>)</span>
+<span id="cb105-4"><a href="#cb105-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Das "!=" bedeutet "nicht". Hier werden also alle Daten, die in der Spalte "outlet" NICHT den Wert "handel" haben in eine neue Tabelle namens "no_handel_data" geschrieben. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Nun können wir schon den t-Test auf die Daten beider Gruppen anwenden:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(handel_data<span class="sc">$</span>pics, no_handel_data<span class="sc">$</span>pics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  handel_data$pics and no_handel_data$pics
+t = 0.9067, df = 2.0892, p-value = 0.4567
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -6.520178 10.186844
+sample estimates:
+mean of x mean of y 
+ 3.000000  1.166667 </code></pre>
+</div>
+</div>
+<p>Alternativ kann man sich die Befehle <code>subset()</code> sparen, und die Definition der Gruppen (=&gt; Teilmengen), also Artikel von Handelsblatt vs.&nbsp;Artikeln von allen anderen direkt im t-test-Befehl machen. Das geht so:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb108"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(data<span class="sc">$</span>pics[data<span class="sc">$</span>outlet<span class="sc">!=</span><span class="st">"handel"</span>], data<span class="sc">$</span>pics[data<span class="sc">$</span>outlet<span class="sc">==</span><span class="st">"handel"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  data$pics[data$outlet != "handel"] and data$pics[data$outlet == "handel"]
+t = -0.9067, df = 2.0892, p-value = 0.4567
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -10.186844   6.520178
+sample estimates:
+mean of x mean of y 
+ 1.166667  3.000000 </code></pre>
+</div>
+</div>
+<p><strong>Hinweis:</strong> In aller Regel dauert es in einem realen Projekt deutlich länger, die Daten in die Form zu bekommen, die es erlaubt den angestrebten Test durchzuführen, als die Dauer (oder Kompliziertheit) des Tests selbst. Oft muss man Daten erst bereinigen oder umformen, was teils sehr aufwendig ist. Der finale Test geht dann oft sehr schnell und einfach. Also: Nicht verunsichern lassen, wenn ihr viel Zeit darauf verwendet, die Daten in eine Form zu bekommen, die notwendig ist den t-Test (oder andere Tests) anzuwenden.</p>
+<p>Zurück zum Beispiel. Im Ergebnis des <code>t.test()</code>-Befehls bekommt man nun ein mehrzeiliges Ergebnis. Das wird wie folgt interpretiert:</p>
+<ul>
+<li><p>In der ersten Teile seht ihr nochmals den Code, der genutzt wird, die Daten für den t-Test zu definieren, also die beiden Gruppen.</p></li>
+<li><p>In den letzten zwei Zeilen seht ihr den Mittelwert für die beiden Gruppen. x ist die linke Gruppe, also alle Outlets ohne Handelsblatt. Demnach haben die drei Outlets (Spiegel Online, Zeit Online und Tagesschau) einen Mittelwert von 1,1667 Bilder pro Artikel. Das Handelsblatt hingegen 3 (diesen Wert haben wir oben schon herausgefunden, es ist immer gut, Ergebnisse auf Plausibilität zu prüfen und sie idealerweise gegen zu checken).</p></li>
+<li><p>Der p-Wert in Zeile 2 ganz rechts gibt euch schliesslich an, ob sich die Mittelwerte der beiden Gruppen statistisch unterscheiden. Es handelt sich um einen statistisch signifikanten Unterschied, wenn p &lt; 0,05. Mit einem p-Wert von 0,457 handelt es sich bei der Anzahl an Bildern also nicht um einen statistisch signifikanten Unterschied zwischen den beiden Gruppen.</p></li>
+</ul>
+<p>Das Ergebnis mag verblüffen, da im Handelsbaltt im Mittel mehr als doppelt so viele Fotos sind als in allen anderen Outlets. Allerdings haben wir in dem Testdatensatz auch nur sehr wenige Daten. Damit ist es schwer eine robuste Aussage über die statistische Signifikanz des Unterschieds zu treffen. Bei kleinen Stichproben kann die Varianz stark schwanken, was die Zuverlässigkeit eines t-Tests beeinträchtigt. In solchen Fällen ist es sinnvoll, mit mehr Daten die Stichprobengrösse zu erhöhen, um eine genauere Einschätzung der Mittelwertunterschiede der beiden Gruppen zu erhalten. In unserem Fall konkret sind die Unterschiede in der durchschnittlichen Anzahl an Fotos zwischen den beiden Gruppen recht gross (der eine Wert ist mehr als doppelt so gross wie der andere). Es ist daher sehr wahrscheinlich, dass die Unterschiede bei grösserer Stichprobengrösse signifikant werden (d.h., dass der p-Wert dann kleiner als 0,05 ist). Das ist aber keinesfalls garantiert. Es kann durchaus sein, dass wir zufällig ein paar Artikel aus dem Handelsblatt ausgefwählt haben, die viele Fotos beinhalten. Möglicherweise haben viele andere keine oder nur sehr wenige Fotos. Daher sollte man mit Prognosen vorsichtig sein und sich nur auf tatsächliche Tests mit tatsächlichen Daten verlassen.</p>
+</section>
+<section id="korrelationstest" class="level6">
+<h6 class="anchored" data-anchor-id="korrelationstest">Korrelationstest</h6>
+<p>Anstatt zu testen, ob ein Unterschied zwischen Variablen besteht, gibt es eine Reihe weiterer Testverfahren den Zusammenhang von Variablen zu prüfen. Eine solche Methode ist, die Korrelation zwischen zwei oder mehr Variablen zu testen. Es gibt drei Korrelationstypen: a) Positive Korrelation: Wenn die eine Variable steigt, steigt auch die andere, b) negative Korrelation: Wenn die eine Variable steigt, sinkt die andere, c) Keine Korrelation: Es gibt keinen erkennbaren Zusammenhang zwischen den Variablen. Man könnte beispielsweise untersuchen, ob zwischen der Körpergröße von Menschen und deren Gewicht ein Zusammenhang besteht. Da wir wissen, dass bei steigender Körpergröße das Gewicht in der Tendenz steigt, spricht man hier von einer positiven Korrelation.</p>
+<p>Wie den t-Test, kann man die Korrelation in R leicht und mit nur einem Befehlt testen. Der Befehl hierfür ist <code>cor.test()</code> und die Syntax ist identisch zu der des <code>t.test()</code>. Aber auch hier ist es nochmal wichtig zu sagen, dass ihr <strong>den Korrelationstest nur anwenden solltet, wenn es eure Hypothese oder Forschungsfrage erforderlich macht</strong>. Das heißt, ihr startet bei der Forschungsfrage und schaut, welcher Test notwendig ist. Diese Arbeit kann in einem Tutorial nicht geleistet werden, da eure Forschungsfragen individuell sehr unterschiedlich sind, was auch eure Anforderungen an die Methodik unterschiedlich macht.</p>
+<p>Zur Illustration wählen wir hier hingegen eine hypothetische Forschungsfrage bzw. eine Hypothese, die sich mit unseren Beispieldaten prüfen lässt: Hängt die Länge der Überschrift, mit der Länge des Artikels zusammen? Unsere Hypothese wäre, dass hier kein Zusammenhang besteht, da Überschriften gewöhnlich sehr ähnlich und daher von ähnlicher Länge sind, ganz unabhängig, wie lang der Artikel ist.</p>
+<p>Um diese Hypothese zu prüfen benötigen wir zwei Variablen: Die Längen der Überschriften und die Längen der Artikeltexte. Wir haben zwar die Überschriften und Texte, aber nicht die Länge dieser beiden Variablen. Das heißt, wir müssen diese Information erst aus den Überschriften und Texten generieren. Das ist ein gutes und praxisnahes Beispiel, welches zeigt, dass der Weg, Daten in das benötigte Format zu bekommen, beträchtlich länger und aufwendiger sein kann als der finale Test.</p>
+<p>Um die Länge der beiden Variablen <code>headline</code> und <code>text</code> zu bestimmen, benötigen wir den Befehl <code>nchar()</code>. Wie der Name insinuiert, bestimmt <code>nchar()</code> die Länge von Texten (Variablen vom Type character):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>length_head <span class="ot">&lt;-</span> <span class="fu">nchar</span>(data<span class="sc">$</span>headline)</span>
+<span id="cb110-2"><a href="#cb110-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>length_text <span class="ot">&lt;-</span> <span class="fu">nchar</span>(data<span class="sc">$</span>text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Nachdem wir in zwei (zugegeben einfachen) Schritten die Textlänge der beiden Variablen bestimmt haben, können wir direkt den Korrelationstest mit nur einer Zeile Code darauf anwenden. Die Syntax ist quasi identisch zu der des t-Tests.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(data<span class="sc">$</span>length_head, data<span class="sc">$</span>length_text)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  data$length_head and data$length_text
+t = -1.5046, df = 13, p-value = 0.1563
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.7495077  0.1584097
+sample estimates:
+       cor 
+-0.3851033 </code></pre>
+</div>
+</div>
+<p>Auch die Interpretation ist ähnlich zum t-Test. In der untersten Zeile wird der Korrelationskoeffizient angezeigt. Dieser ist mit -0,39 negativ. Das heisst, wenn die Überschriften länger werden, werden die Artikeltexte in der Tendenz kürzer. Allerdings ist der p-Wert (Zeile 2) mit 0,16 größer als 0,05. Das heisst, dass kein signifikanter Zusammenhang zwischen den Längen der beiden Variablen besteht. Unsere Hypothese, dass es keinen Zusammenhang zwischen der Länge der Überschrift und der Länge des Artikeltextes gibt kann daher vorläufig bestätigt werden. Auch hier haben wir allerdings noch sehr wenig Daten. Idealerweise wären für einen aussagekräftigeren Test mehr Daten gefordert.</p>
+<p>Bitte informiert euch für die Auswertung eurer Daten, welcher Test bzw. welche Analyse für eure Forschungsfrage sinnvoll bzw. gefordert ist. Hier wurden mit dem t-Test und dem Korrelationstest zwei Verfahren gezeigt. Diese können für eure Fragen relevant sein, das muss aber nicht so sein. <strong>Nicht ideal wäre, wenn ihr einen Test anwendet, der für eure Forschungsfrage keine Relevanz hat, bzw. unsinnig ist.</strong> Konsultiert im Zweifel eure Aufzeichnungen der Methoden und Statistik-Veranstaltungen, fragt eure Kommilitoninnen oder uns.</p>
+</section>
 </section>
 
 </main>
